@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Project Setup (Splathon Ladder)
+
+- Create a Supabase project and set the following env vars in `.env.local`:
+  - `SUPABASE_URL`
+  - `SUPABASE_ANON_KEY`
+  - `SUPABASE_SERVICE_ROLE_KEY` (server-only)
+  - `ADMIN_TOKEN` (arbitrary secret used to authorize write operations)
+- Apply SQL in `supabase/schema.sql` using the Supabase SQL Editor.
+- Run locally:
+  - `npm run dev` then open http://localhost:3000/teams
+
+Notes
+- Public can list teams. Only requests with header `x-admin-token: $ADMIN_TOKEN` can create/update via `/api/teams`.
+- Teams are ordered by `rating DESC, created_at ASC` (同率は登録順)。
+- Members are fixed 4 names per team.
