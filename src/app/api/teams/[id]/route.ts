@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
 const requireAdmin = (req: NextRequest) => {
-  const token = req.headers.get('x-admin-token')
-  if (!process.env.ADMIN_TOKEN || token !== process.env.ADMIN_TOKEN) {
+  const token = req.headers.get('x-admin-token')?.trim()
+  const admin = process.env.ADMIN_TOKEN?.trim()
+  if (!admin || token !== admin) {
     return false
   }
   return true
