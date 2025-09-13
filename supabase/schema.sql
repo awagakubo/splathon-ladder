@@ -1,4 +1,7 @@
 -- Schema for tourney-rate
+-- Ensure UUID generation function is available
+create extension if not exists pgcrypto;
+
 create table if not exists public.events (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -29,10 +32,14 @@ alter table public.teams enable row level security;
 alter table public.rating_history enable row level security;
 
 -- Read for anon (public) on teams and events
-create policy if not exists "Public read events" on public.events for select using (true);
-create policy if not exists "Public read teams" on public.teams for select using (true);
-create policy if not exists "Public read rating_history" on public.rating_history for select using (true);
+drop policy if exists "Public read events" on public.events;
+create policy "Public read events" on public.events for select using (true);
+
+drop policy if exists "Public read teams" on public.teams;
+create policy "Public read teams" on public.teams for select using (true);
+
+drop policy if exists "Public read rating_history" on public.rating_history;
+create policy "Public read rating_history" on public.rating_history for select using (true);
 
 -- No write access for anon by default; service_role bypasses RLS and is used by the server
 -- You may later add authenticated user policies for admins.
-
